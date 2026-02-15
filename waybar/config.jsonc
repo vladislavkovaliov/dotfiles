@@ -7,8 +7,8 @@
   "modules-left": ["custom/omarchy", "hyprland/workspaces"],
   "modules-center": ["clock", "custom/update", "custom/voxtype", "custom/screenrecording-indicator"],
   "modules-right": [
-    "custom/ip",
     "group/tray-expander",
+    "custom/ip",
     "bluetooth",
     "network",
     "pulseaudio",
@@ -40,6 +40,13 @@
       "5": []
     }
   },
+  "custom/ip": {
+    "exec": "~/.config/waybar/scripts/ip/ip.sh",
+    "interval": 5,
+    "format": "{}",
+    "return-type": "json",
+    "tooltip": false
+  },
   "custom/omarchy": {
     "format": "<span font='omarchy'>\ue900</span>",
     "on-click": "omarchy-menu",
@@ -53,13 +60,6 @@
     "tooltip-format": "Omarchy update available",
     "signal": 7,
     "interval": 21600
-  },
-  "custom/ip": {
-    "exec": "~/.config/waybar/scripts/ip/ip.sh",
-    "interval": 5,
-    "format": "{}",
-    "return-type": "json",
-    "tooltip": false
   },
 
   "cpu": {
