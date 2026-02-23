@@ -1,1 +1,1 @@
-stow -d ~/dotfiles -t ~/ .
+stow -d ~/temp/dotfiles -t ~/ . --adopt
