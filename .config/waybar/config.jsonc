@@ -32,12 +32,12 @@
 
     "custom/quicklink1": {
         "format": " ",
-        "on-click": "flatpak run com.ml4w.hyprlandsettings",
+        "on-click": "systemsettings",
         "tooltip-format": "Open Hyprland Settings"
     },
-    
+
     "custom/quicklink2": {
-        "format": " ",
+        "format": " ",
         "on-click": "google-chrome-stable",
         "tooltip-format": "Open the browser"
     },
