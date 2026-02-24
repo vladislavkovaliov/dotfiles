@@ -64,9 +64,9 @@ window#waybar {
  * ----------------------------------------------------- */
 
 tooltip {
-    border-radius: 16px;
+    border-radius: 4px;
     background-color: @bg0;
-    opacity: 0.9;
+    opacity: 1;
     padding: 20px;
     margin: 0px;
 }
@@ -176,6 +176,7 @@ window#waybar.empty #window {
     font-size: 20px;
     font-weight: bold;
     opacity: 1.0;
+    background-color: transparent;
     color: @fg;
 }
 
