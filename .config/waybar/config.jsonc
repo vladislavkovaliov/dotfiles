@@ -36,8 +36,8 @@
         "hyprland/language",
         "battery",
         "tray",
-        "custom/exit",
-        "clock"
+        "clock",
+        "custom/exit"
     ],
 
     "custom/quicklink1": {
@@ -163,7 +163,7 @@
     }, 
 
     "hyprland/language": {
-        "format": " {short}"
+        "format": "{short}"
     },
 
     // Group Hardware
@@ -186,14 +186,14 @@
   // Network
   "network": {
     "format": "{ifname}",
-    "format-wifi": " {essid} ({signalStrength}%)",
+    "format-wifi": "{essid} ({signalStrength}%)",
     "format-ethernet": "  {ifname}",
     "format-disconnected": "Disconnected ⚠",
     "tooltip-format": " {ifname} via {gwaddri}",
     "tooltip-format-wifi": "  {ifname} @ {essid}\nIP: {ipaddr}\nStrength: {signalStrength}%\nFreq: {frequency}MHz\nUp: {bandwidthUpBits} Down: {bandwidthDownBits}",
     "tooltip-format-ethernet": " {ifname}\nIP: {ipaddr}\n up: {bandwidthUpBits} down: {bandwidthDownBits}",
     "tooltip-format-disconnected": "Disconnected",
-    "max-length": 50,
+    "max-length": 64,
     "on-click": "~/.config/ml4w/settings/networkmanager.sh",
     "on-click-right": "~/.config/ml4w/scripts/nm-applet.sh toggle",
   },
