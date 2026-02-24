@@ -120,7 +120,12 @@
     "clock": {
         "timezone": "Europe/Minsk",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+        "format-alt": "{:%Y-%m-%d}",
+        "calendar": {
+            "format": {
+                "today": "<span color='#ebcb8b'><b><u>{}</u></b></span>"
+            }
+        }
     },
 
     "custom/system": {
