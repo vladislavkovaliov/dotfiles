@@ -5,7 +5,8 @@ WALLPAPER_DIR="$HOME/.config/hypr/wallpaper"
 
 # Check if wallpaper directory exists
 if [ ! -d "$WALLPAPER_DIR" ]; then
-    echo "Error" "Wallpaper directory not found: $WALLPAPER_DIR"
+    notify-send "Error" "Wallpaper directory not found: $WALLPAPER_DIR"
+
     exit 1
 fi
 
@@ -17,7 +18,8 @@ done < <(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.jpeg" -o -na
 
 # Check if any images were found
 if [ ${#images[@]} -eq 0 ]; then
-    echo "Error" "No images found in $WALLPAPER_DIR"
+    notify-send "Error" "No images found in $WALLPAPER_DIR"
+
     exit 1
 fi
 
@@ -41,6 +43,7 @@ if [ -n "$selected" ]; then
                 --transition-fps 60
             
             notify-send "Wallpaper Changed" "Selected: $selected"
+
             break
         fi
     done

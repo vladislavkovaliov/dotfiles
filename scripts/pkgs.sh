@@ -20,7 +20,6 @@ general=(
 	"qt6-wayland"
 	"rofi-wayland"
 	"swww"
-	"swaync"
 	"thunar"
 	"ttf-fira-code"
 	"ttf-fira-sans"

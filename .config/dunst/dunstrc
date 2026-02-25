@@ -1,0 +1,73 @@
+[global]
+    ### Display ###
+    monitor = 0  # 0 for primary monitor, change for multi-monitor setups
+    follow = mouse
+    width = 350  # ширина уведомлений
+    height = 100  # высота уведомлений
+    origin = top-right
+    offset = 20x50  # отступы от краёв экрана
+    scale = 1  # автоматически масштабировать для HiDPI
+    notification_limit = 0  # отсутствие ограничений по количеству уведомлений на экране
+
+    ### Progress bar ###
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+    progress_bar_min_width = 150
+    progress_bar_max_width = 350
+
+    ### Appearance ###
+    transparency = 0  # убираем прозрачность
+    corner_radius = 10  # скругленные углы
+    frame_width = 2  # ширина рамки уведомлений
+    frame_color = "#282c34"  # цвет рамки
+    separator_height = 2
+    separator_color = frame
+    padding = 15  # паддинг для текста
+    horizontal_padding = 12  # горизонтальные отступы
+    text_icon_padding = 8  # отступ между текстом и иконкой
+
+    font = "Monospace 12"  # шрифт и его размер
+    line_height = 1.5
+    markup = full  # разрешаем полный HTML для оформления
+    format = "<b>%s</b>\n%b"  # формат уведомлений
+    alignment = left  # выравнивание текста
+    vertical_alignment = center
+    show_age_threshold = 60  # отображение времени уведомлений
+    ellipsize = middle  # усечение текста по центру
+    ignore_newline = no
+    stack_duplicates = true  # сгруппировать одинаковые уведомления
+    hide_duplicate_count = false
+    show_indicators = yes
+
+    ### Icons ###
+    icon_position = left  # позиция иконки
+    min_icon_size = 16  # минимальный размер иконки
+    max_icon_size = 32  # максимальный размер иконки
+    icon_path = /usr/share/icons/Adwaita/16x16/status/:/usr/share/icons/Adwaita/16x16/devices/  # путь к иконкам
+
+    ### History ###
+    sticky_history = yes  # сохраняем историю уведомлений
+    history_length = 30  # количество сохранённых уведомлений
+
+    ### Misc ###
+    browser = /usr/bin/xdg-open
+    always_run_script = true
+    title = Dunst
+    class = Dunst
+
+[urgency_low]
+    background = "#282c34"
+    foreground = "#888888"
+    timeout = 8  # время отображения уведомлений с низким приоритетом
+
+[urgency_normal]
+    background = "#282c34"
+    foreground = "#ffffff"
+    timeout = 10  # время отображения уведомлений с нормальным приоритетом
+
+[urgency_critical]
+    background = "#282c34"
+    foreground = "#ffffff"
+    frame_color = "#ff0000"
+    timeout = 0  # уведомления с критическим приоритетом не исчезают
