@@ -42,7 +42,7 @@ if [ -n "$selected" ]; then
                 --transition-duration 1.5 \
                 --transition-fps 60
             
-            notify-send "Wallpaper Changed" "Selected: $selected"
+            notify-send "Wallpaper Changed" "Selected: $selected" --urgency=low
 
             break
         fi

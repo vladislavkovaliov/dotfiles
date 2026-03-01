@@ -47,7 +47,7 @@
     icon_path = /usr/share/icons/Adwaita/16x16/status/:/usr/share/icons/Adwaita/16x16/devices/  # путь к иконкам
 
     ### History ###
-    sticky_history = yes  # сохраняем историю уведомлений
+    sticky_history = no  # сохраняем историю уведомлений
     history_length = 30  # количество сохранённых уведомлений
 
     ### Misc ###
@@ -70,4 +70,4 @@
     background = "#282c34"
     foreground = "#ffffff"
     frame_color = "#ff0000"
-    timeout = 0  # уведомления с критическим приоритетом не исчезают
+    timeout = 15  # уведомления с критическим приоритетом не исчезают
