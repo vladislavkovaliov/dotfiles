@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e 
+
 general=(
 	"blueman"
 	"brightnessctl"
@@ -38,10 +40,10 @@ _check-command-exists() {
     cmd="$1"
     
 	if ! command -v "$cmd" >/dev/null; then
-        echo 1
+            echo 1
     
 	    return
-    fi
+        fi
     
 	echo 0
     
@@ -50,64 +52,48 @@ _check-command-exists() {
 
 
 _check-package-installed() {
-    package="$1"
-    
-	check="$(sudo pacman -Qs --color always "${package}" | grep "local" | grep "${package} ")"
+	check="$(sudo pacman -Qs --color always "${$1}" | grep "local" | grep "${package} ")"
     
 	if [ -n "${check}" ]; then
-        echo 0
-        return #true
-    fi
+           return 1 #true
+        fi
     
-	echo 1
-    
-	return #false
+	return 0 #false
 }
 
 _install-yay() {
-    _installPackages "base-devel"
+	echo ":: Installing yay..."    
     
-	SCRIPT=$(realpath "$0")
-    
-	temp_path=$(dirname "$SCRIPT")
-    
-	git clone https://aur.archlinux.org/yay.git $download_folder/yay
-    
-	cd $download_folder/yay
-    
+	sudo pacman -S --needed --noconfirm base-devel    
+	
+	cd "$HOME/Downloads"    
+	
+	git clone https://aur.archlinux.org/yay.git    
+	
+	cd yay
+    	
 	makepkg -si
-    
-	cd $temp_path
-    
+	
+	cd ~
+	
 	echo ":: yay has been installed successfully."
 }
 
 _install-packages() {
-    toInstall=()
     
-	for pkg; do
-        if [[ $(_isInstalled "${pkg}") == 0 ]]; then
-            echo ":: ${pkg} is already installed."
-    
-	        continue
-        fi
-    
-	    echo "Package not installed: ${pkg}"
-    
-	    yay --noconfirm -S "${pkg}"
-    done
+	for pkg in "${general[@]}"; do
+        
+	if [[ $(_check-package-installed "$pkg") == 0 ]]; then
+            	echo ":: ${pkg} is already installed."
+	    	continue
+        else
+		echo ":: Install $pkg ..."
+		yay -S --noconfirm "$pkg"
+	fi
+	done
 }
 
-clear
 
-echo -e "${GREEN}"
+_install-packages
 
-cat <<"EOF"
-   ____    __          
-  / __/__ / /___ _____ 
- _\ \/ -_) __/ // / _ \
-/___/\__/\__/\_,_/ .__/
-                /_/    
 
-EOF
-echo -e "${NONE}"
