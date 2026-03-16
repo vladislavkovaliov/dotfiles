@@ -27,8 +27,6 @@ esac
 volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]\+%' | head -n1 | tr -d '%')
 mute=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
 
-echo "$volume"
-echo "$mute"
 
 if [ -f "$ID_FILE" ]; then
     notif_id=$(cat "$ID_FILE")
@@ -37,7 +35,6 @@ else
 fi
 
 if [[ "$mute" == "yes" || "$volume" -eq 0 ]]; then
-    echo "muted"
     icon="audio-volume-muted"
     text="Muted"
 else
