@@ -1,31 +1,50 @@
 #!/bin/bash
-# changeVolume
 
-# Arbitrary but unique message tag
-msgTag="myvolume"
+step=5
+msgTag="volume"
 
-if [[ $@ != "mute" ]]; then
-    amixer -c 0 set Master "$@" > /dev/null
+ID_FILE="$HOME/.config/hypr/volume_id"
+
+case "$1" in
+    up)
+        volume=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | head -n1 | tr -d '%')
+        echo "$volume"
+        if [ "$volume" -lt 100 ]; then
+            pactl set-sink-volume @DEFAULT_SINK@ +${step}%
+        fi
+        ;;
+    down)
+        volume=$(pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | head -n1 | tr -d '%')
+        if [ "$volume" -ge 0 ]; then
+            pactl set-sink-volume @DEFAULT_SINK@ -${step}%
+        fi
+        ;;
+    mute)
+        pactl set-sink-mute @DEFAULT_SINK@ toggle
+        ;;
+esac
+
+volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]\+%' | head -n1 | tr -d '%')
+mute=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
+
+
+if [ -f "$ID_FILE" ]; then
+    notif_id=$(cat "$ID_FILE")
+else
+    notif_id=0
 fi
 
-# Change the volume using alsa(might differ if you use PulseAudio)
+if [[ "$mute" == "yes" || "$volume" -eq 0 ]]; then
+    icon="audio-volume-muted"
+    text="Muted"
+else
+    if (( volume < 30 )); then icon="audio-volume-low"
+    elif (( volume < 70 )); then icon="audio-volume-medium"
+    else icon="audio-volume-high"
+    fi
+    text="$volume%"
+fi
 
+new_id=$(notify-send -r "$notif_id" -u low -i "$icon" "Volume" "$text" -p | head -n1)
 
-# Query amixer for the current volume and whether or not the speaker is muted
-volume="$(amixer -c 0 get Master | tail -1 | awk '{print $4}' | sed 's/[^0-9]*//g')"
-mute="$(amixer -c 0 get Master | tail -1 | awk '{print $6}' | sed 's/[^a-z]*//g')"
-echo $mute
-echo $volume
-
-
-# if [[ $volume == 0 || "$mute" == "off" ]]; then
-#     # Show the sound muted notification
-#     dunstify -a "changeVolume" -u low -i audio-volume-muted -h string:x-dunst-stack-tag:$msgTag "Volume muted" 
-# else
-#     # Show the volume notification
-#     dunstify -a "changeVolume" -u low -i audio-volume-high -h string:x-dunst-stack-tag:$msgTag \
-#     -h int:value:"$volume" "Volume: ${volume}%"
-# fi
-
-# Play the volume changed sound
-#canberra-gtk-play -i audio-volume-change -d "changeVolume"
+echo "$new_id" > "$ID_FILE"
