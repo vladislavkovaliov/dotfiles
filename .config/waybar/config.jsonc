@@ -134,12 +134,12 @@
     },
 
     "cpu": {
-        "format": "/ C {usage}% ",
+        "format": "C {usage}% ",
         "on-click": "kitty -e btop"
     },
 
     "memory": {
-        "format": "/ M {}% ",
+        "format": "M {}% ",
         "on-click": "kitty -e btop"
     },
 
@@ -191,7 +191,7 @@
             "critical": 15
         },
         "format": "{icon}   {capacity}%",
-        "format-charging": "  {capacity}%",
+        "format-charging": "\udb80\udc85  {capacity}%",
         "format-plugged": "  {capacity}%",
         "format-alt": "{icon}  {time}",
         // "format-good": "", // An empty format will hide the module
@@ -203,7 +203,7 @@
         "format": "{icon}  {volume}%",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
+        "format-muted": "\udb81\udf5f {format_source}",
         "format-source": "{volume}% ",
         "format-source-muted": "",
         "format-icons": {

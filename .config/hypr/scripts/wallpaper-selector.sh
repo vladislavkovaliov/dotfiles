@@ -14,7 +14,7 @@ fi
 images=()
 while IFS= read -r -d '' file; do
     images+=("$file")
-done < <(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.jpeg" -o -name "*.png" -o -name "*.gif" -o -name "*.webp" \) -print0)
+done < <(find -L "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" -o -iname "*.webp" \) -print0)
 
 # Check if any images were found
 if [ ${#images[@]} -eq 0 ]; then

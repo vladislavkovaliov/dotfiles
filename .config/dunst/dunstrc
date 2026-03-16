@@ -37,7 +37,7 @@
     ellipsize = middle  # усечение текста по центру
     ignore_newline = no
     stack_duplicates = true  # сгруппировать одинаковые уведомления
-    hide_duplicate_count = false
+    hide_duplicate_count = true
     show_indicators = yes
 
     ### Icons ###

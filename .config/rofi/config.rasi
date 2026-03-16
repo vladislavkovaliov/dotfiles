@@ -145,3 +145,5 @@ case-indicator {
    text-color:@maincolor;
    background-color:@blackwidget;
 }
+
+@theme "/usr/share/rofi/themes/Monokai.rasi"
