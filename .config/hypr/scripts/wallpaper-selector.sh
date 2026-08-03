@@ -1,5 +1,5 @@
 #!/bin/bash
-# Wallpaper selector using rofi and swww
+# Wallpaper selector using rofi and awww
 
 WALLPAPER_DIR="$HOME/.config/hypr/wallpaper"
 
@@ -36,8 +36,8 @@ if [ -n "$selected" ]; then
     # Find the full path of the selected image
     for img in "${images[@]}"; do
         if [ "$(basename "$img")" = "$selected" ]; then
-            # Apply wallpaper using swww
-            swww img "$img" \
+            # Apply wallpaper using awww
+            awww img "$img" \
                 --transition-type random \
                 --transition-duration 1.5 \
                 --transition-fps 60

@@ -8,7 +8,7 @@
 
     "modules-left": [
         "custom/appmenu",
-        "hyprland/workspaces",
+        "ext/workspaces",
         "group/quicklinks"
     ],
 
@@ -18,7 +18,7 @@
 
     "modules-right": [
         "mpd",
-        "pulseaudio",
+        "group/audio",
         "network",
         "cpu",
         "memory",
@@ -60,19 +60,17 @@
         ]
     },
 
-    "hyprland/workspaces": {
+    "ext/workspaces": {
         "on-click": "activate",
         "active-only": false,
         "all-outputs": true,
-        "format": "{}",
+        "format": "{id}",
         "format-icons": {
-            "urgent": "",
             "active": "",
             "default": ""
         },
-        "persistent-workspaces": {
-            "*": 5
-        }
+        "sort-by-id": true,
+        "ignore-hidden": false
     },
 
     "hyprland/window": {
@@ -170,8 +168,13 @@
     },
 
     "network": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
         "format": "{ifname}",
-        "format-wifi": "{essid} ({signalStrength}%)",
+        "format-wifi": "    {signalStrength}%",
         "format-ethernet": "  {ifname}",
         "format-disconnected": "Disconnected ⚠",
         "tooltip-format": " {ifname} via {gwaddri}",
@@ -188,19 +191,18 @@
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon}   {capacity}%",
+        "interval": 60,
+        "format": "{capacity}% {icon}",
+        "format-icons": {
+            "default": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+            "charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"]
+        },
+        // "format": "{icon}{capacity}%",
         "format-charging": "\udb80\udc85  {capacity}%",
         "format-plugged": "  {capacity}%",
         "format-alt": "{icon}  {time}",
         // "format-good": "", // An empty format will hide the module
-        // "format-full": "",
-        "format-icons": [
-            " ",
-            " ",
-            " ",
-            " ",
-            " "
-        ]
+        // "format-full": ""
     },
 
     "pulseaudio": {
@@ -216,7 +218,6 @@
             "headset": "",
             "phone": "",
             "portable": "",
-            "car": "",
             "default": [
                 "",
                 " ",
@@ -226,9 +227,33 @@
         "on-click": "pavucontrol"
     },
 
+    "pulseaudio/slider": {
+        "min": 0,
+        "max": 100,
+        "orientation": "horizontal",
+        "zero-on-mute": false,
+        "unmute-on-volume-change": false
+    },
+
+    "group/audio": {
+        "orientation": "horizontal",
+        "drawer": {
+            "transition-duration": 200,
+            "children-class": "audio-slider"
+        },
+        "modules": [
+            "pulseaudio",
+            "pulseaudio/slider"
+        ]
+    },
+
     "bluetooth": {
         "format-disabled": "",
         "format-off": "",
+        "format-connected": " {num_connections}",
+        "tooltip-format": "{controller_alias}\t{controller_address}",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
         "interval": 30,
         "on-click": "blueman-manager",
         "format-no-controller": ""
