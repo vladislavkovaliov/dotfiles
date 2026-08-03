@@ -1,9 +1,9 @@
 {
     "layer": "top",
-    "margin-top": 8,
+    "margin-top": 0,
     "margin-bottom": 0,
-    "margin-left": 12,
-    "margin-right": 12,    
+    "margin-left": 0,
+    "margin-right": 0,
     "spacing": 0,
 
     "modules-left": [
@@ -41,15 +41,14 @@
         "on-click": "google-chrome-stable",
         "tooltip-format": "Open the browser"
     },
-    
+
     "custom/quicklink3": {
         "format": " ",
         "on-click": "thunar",
         "tooltip-format": "Open the filemanager"
     },
 
-    "custom/quicklinkempty": {
-    },
+    "custom/quicklinkempty": {},
 
     "group/quicklinks": {
         "orientation": "horizontal",
@@ -61,19 +60,19 @@
         ]
     },
 
-    "hyprland/workspaces" : {
+    "hyprland/workspaces": {
         "on-click": "activate",
         "active-only": false,
         "all-outputs": true,
         "format": "{}",
         "format-icons": {
-			"urgent": "",
-			"active": "",
-			"default": ""
+            "urgent": "",
+            "active": "",
+            "default": ""
         },
         "persistent-workspaces": {
-             "*": 5
-        }       
+            "*": 5
+        }
     },
 
     "hyprland/window": {
@@ -91,10 +90,10 @@
         "format": "Apps",
         "tooltip-format": "Left: Open the application launcher\nRight: Show all keybindings",
         "on-click": "rofi -show drun -replace",
-        "on-click-right": "~/.config/ml4w/scripts/keybindings.sh",
+        "on-click-right": "~/.config/hypr/scripts/keybindings.sh",
         "tooltip": false
     },
-    
+
     "custom/exit": {
         "format": "",
         "tooltip-format": "Powermenu",
@@ -148,7 +147,7 @@
         "format": "D {percentage_used}% ",
         "path": "/",
         "on-click": "kitty -e btop"
-    }, 
+    },
 
     "hyprland/language": {
         "format": "{short}"
@@ -160,7 +159,7 @@
             "transition-duration": 300,
             "children-class": "not-memory",
             "transition-left-to-right": false
-        },        
+        },
         "modules": [
             "custom/system",
             "disk",
@@ -169,20 +168,19 @@
             "hyprland/language"
         ]
     },
-    
-  "network": {
-    "format": "{ifname}",
-    "format-wifi": "{essid} ({signalStrength}%)",
-    "format-ethernet": "  {ifname}",
-    "format-disconnected": "Disconnected ⚠",
-    "tooltip-format": " {ifname} via {gwaddri}",
-    "tooltip-format-wifi": "  {ifname} @ {essid}\nIP: {ipaddr}\nStrength: {signalStrength}%\nFreq: {frequency}MHz\nUp: {bandwidthUpBits} Down: {bandwidthDownBits}",
-    "tooltip-format-ethernet": " {ifname}\nIP: {ipaddr}\n up: {bandwidthUpBits} down: {bandwidthDownBits}",
-    "tooltip-format-disconnected": "Disconnected",
-    "max-length": 64,
-    "on-click": "kitty -e nmtui",
-    "on-click-right": "~/.config/ml4w/scripts/nm-applet.sh toggle",
-  },
+
+    "network": {
+        "format": "{ifname}",
+        "format-wifi": "{essid} ({signalStrength}%)",
+        "format-ethernet": "  {ifname}",
+        "format-disconnected": "Disconnected ⚠",
+        "tooltip-format": " {ifname} via {gwaddri}",
+        "tooltip-format-wifi": "  {ifname} @ {essid}\nIP: {ipaddr}\nStrength: {signalStrength}%\nFreq: {frequency}MHz\nUp: {bandwidthUpBits} Down: {bandwidthDownBits}",
+        "tooltip-format-ethernet": " {ifname}\nIP: {ipaddr}\n up: {bandwidthUpBits} down: {bandwidthDownBits}",
+        "tooltip-format-disconnected": "Disconnected",
+        "max-length": 64,
+        "on-click": "kitty -e nmtui",
+    },
 
     "battery": {
         "states": {
@@ -196,13 +194,19 @@
         "format-alt": "{icon}  {time}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": [" ", " ", " ", " ", " "]
+        "format-icons": [
+            " ",
+            " ",
+            " ",
+            " ",
+            " "
+        ]
     },
 
     "pulseaudio": {
         "format": "{icon}  {volume}%",
         "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
+        "format-bluetooth-muted": " {icon} {format_source}",
         "format-muted": "\udb81\udf5f {format_source}",
         "format-source": "{volume}% ",
         "format-source-muted": "",
@@ -213,7 +217,11 @@
             "phone": "",
             "portable": "",
             "car": "",
-            "default": ["", " ", " "]
+            "default": [
+                "",
+                " ",
+                " "
+            ]
         },
         "on-click": "pavucontrol"
     },
@@ -229,16 +237,16 @@
     "user": {
         "format": "{user}",
         "interval": 60,
-        "icon": false,
+        "icon": false
     },
 
     "idle_inhibitor": {
         "format": "{icon}",
         "tooltip": true,
-        "format-icons":{
+        "format-icons": {
             "activated": "",
             "deactivated": ""
         },
-        "on-click-right": "hyprlock"        
+        "on-click-right": "hyprlock"
     }
 }
