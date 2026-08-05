@@ -11,13 +11,13 @@ package installation.
 
 | Area | Tech |
 |------|------|
-| Window manager | [Hyprland](https://hyprland.org) (dwindle layout) |
-| Status bar | Waybar (GTK3/CSS) |
+| Window manager | [Hyprland](https://hyprland.org) (dwindle layout, Lua config) |
+| Desktop shell (bar) | wayle (panel, notify, systray, media) |
 | Launcher | rofi-wayland (rasi theme) |
-| Notifications | Dunst (dunstrc) + swaync autostarted |
-| Wallpaper | swww + swww-daemon |
-| Power menu | wlogout |
-| Shell widgets | ags (Astal/GTK4, `main.tsx`) |
+| Notifications | wayle notify (built-in) |
+| Wallpaper | awww (former swww) |
+| Power menu | wlogout + wleave |
+| Lock screen | hyprlock |
 | Terminal / FM | kitty / dolphin, thunar |
 | Audio | PipeWire via `pactl`, `wpctl` |
 | Backlight | `brightnessctl` |
@@ -29,18 +29,16 @@ package installation.
 ```
 ~/dotfiles/
 ├── .config/                  # stow target: ~/.config/...
-│   ├── ags/                  # Astal shell widget (main.tsx)
-│   ├── dunst/                # dunstrc notification daemon config
-│   ├── gtk-3.0/              # settings.ini (cursor theme)
-│   ├── hypr/                 # Hyprland WM config (modular)
-│   │   ├── hyprland.conf     # entry point — sources all conf/*.conf
+│   ├── gtk-3.0/              # settings.ini (Adwaita theme)
+│   ├── hypr/                 # Hyprland WM config (Lua entry + conf/*.conf)
+│   │   ├── hyprland.lua      # entry point (Hyprland 0.56 Lua API)
+│   │   ├── hyprland.conf     # legacy .conf entry point (rollback fallback)
 │   │   ├── conf/             # one file per concern (see below)
 │   │   ├── scripts/          # volume/brightness/wallpaper shell scripts
 │   │   ├── wallpaper/        # image assets (png/jpg)
-│   │   └── swww.conf         # wallpaper daemon defaults
+│   │   ├── hyprlock.conf     # lock screen config
+│   │   └── swww.conf         # legacy wallpaper daemon defaults (awww)
 │   ├── rofi/                 # config.rasi theme
-│   ├── waybar/               # bar: config.jsonc, style.css, colors/
-│   │   └── scripts/ip/       # custom network module script
 │   └── wlogout/              # power menu: layout + style.css + icons/
 ├── scripts/
 │   ├── pkgs.sh               # installs the full package list via yay
@@ -51,8 +49,9 @@ package installation.
 
 ### Hyprland modular config
 
-`hyprland.conf` is a thin entry point that only `source`s the 14 files in `conf/`,
-each covering a single concern:
+`hyprland.lua` is the active entry point (Hyprland 0.56 Lua API). The legacy
+`hyprland.conf` + `conf/*.conf` are kept as a rollback fallback. The 14 `conf/*.conf`
+files each cover a single concern:
 
 | File | Concern |
 |------|---------|
@@ -69,23 +68,22 @@ each covering a single concern:
 | `misc.conf` | disable logo/splash/default wallpaper |
 | `keybindings.conf` | all binds (workspaces, media keys, scratchpad) |
 | `windowrules.conf` | per-window rules (float, no-focus, move) |
-| `autostart.conf` | exec-once: waybar, swaync, swww-daemon + wallpaper |
+| `autostart.conf` | exec-once: awww-daemon + wallpaper (wayle via hyprland.lua) |
 
 ## Core Components
 
 ### Hyprland (`~/.config/hypr`)
-- Single entry point `hyprland.conf` sourcing modular `conf/*.conf`.
+- Active entry point `hyprland.lua` (Lua API) with `conf/*.conf` as rollback fallback.
 - Variables `$terminal` (kitty), `$fileManager` (dolphin), `$menu` (rofi) defined in
   `autostart.conf` and used in `keybindings.conf`.
 - NVIDIA-specific env vars in `env.conf` (GBM_BACKEND, VK_LAYER, etc.).
 
-### Waybar (`~/.config/waybar`)
-- `config.jsonc` — JSONC config: left (appmenu, workspaces, quicklinks group), center
-  (window title with rewrite rules), right (audio, network, hw, clock, exit).
-- `style.css` — imports `colors/default.css` (One Dark palette via `@define-color`),
-  sectioned with `/* ---- Name ---- */` comments.
-- `start.sh` — restarts the bar (`pkill waybar` → `hyprctl dispatch exec waybar`).
-- `scripts/ip/ip.sh` — emits `{"text","class"}` JSON for the network module.
+### wayle (`~/.config/wayle`)
+- Desktop shell: `wayle shell` runs the bar, `wayle notify` handles notifications.
+- `runtime.toml` — bar layout: left (hyprland-workspaces), center (clock), right
+  (bluetooth, network, volume, battery, power → `wleave -b 1`).
+- `styles/index.scss` — custom styling overrides.
+- Replaces both Waybar and swaync.
 
 ### Shell scripts (`~/.config/hypr/scripts`)
 - `volume-control.sh` — `pactl` sink volume/mute; persists notification ID to
@@ -93,7 +91,7 @@ each covering a single concern:
 - `brightness-control.sh` — `brightnessctl` up/down/max/min; same notification
   ID-replacement pattern (`~/.config/hypr/brightness_id`).
 - `wallpaper-selector.sh` — finds images in `~/.config/hypr/wallpaper`, shows a rofi
-  `-dmenu`, applies selection via `swww img --transition-type random`.
+  `-dmenu`, applies selection via `awww img --transition-type grow`.
 
 ### Package bootstrap (`~/dotfiles/scripts/pkgs.sh`)
 - `general` array = full package list (WM stack + utils, see Tech Stack).
@@ -104,31 +102,30 @@ each covering a single concern:
 
 ```
 Boot/Hyprland start
-  └─ hyprland.conf sources conf/*.conf
-       └─ autostart.conf exec-once:
-            waybar (reads config.jsonc + style.css + colors/default.css)
-            swaync (notifications)
-            swww-daemon + swww img <wallpaper>
+  └─ hyprland.lua (Lua API)
+       └─ hyprland.start event:
+            wayle panel start  (bar + notifications)
+            awww-daemon + awww img <wallpaper>
 
 User input
-  └─ keybindings.conf binds:
+  └─ keybindings.conf / hyprland.lua binds:
        $mainMod SPACE → rofi -show drun   (launcher)
-       XF86Audio*     → volume-control.sh (pactl → notify-send, ID-replaced)
-       XF86Brightness → brightness-control.sh (brightnessctl → notify-send)
-       $mainMod ALT W → wallpaper-selector.sh (rofi → swww img)
-       custom/exit    → wlogout (layout actions: lock/logout/shutdown/reboot)
+       XF86Audio*     → volume-control.sh (pactl → notify)
+       XF86Brightness → brightness-control.sh (brightnessctl → notify)
+       $mainMod ALT W → wallpaper-selector.sh (rofi → awww img)
+       power module   → wleave -b 1 (wlogout actions: lock/suspend/logout/...)
 ```
 
 ## External Integrations
 
 - **pactl / wpctl** (PipeWire) — audio volume/mute
 - **brightnessctl** — backlight control
-- **swww** — wallpaper daemon
+- **awww** — wallpaper daemon
 - **rofi** — dmenu launcher
-- **notify-send** (libnotify) — desktop notifications
+- **notify-send** (libnotify) / wayle notify — desktop notifications
 - **playerctl** — media player controls
 - **hyprctl** — Hyprland IPC (dispatch/exec)
-- **nmcli/nmtui** (NetworkManager) — network config from Waybar on-click
+- **nmcli/nmtui** (NetworkManager) — network config from wayle on-click
 - **yay** (AUR) — package installs
 
 ## Configuration
@@ -138,8 +135,8 @@ User input
   `~/.config/hypr`).
 - **No env vars / secrets** — all paths hardcoded to `~/.config/...`.
 - **Palette**: One Dark, single source of truth in
-  `waybar/colors/default.css` (`@define-color`), hardcoded hex reused in
-  `dunstrc`, `wlogout/style.css`, and Hyprland `general.conf`.
+  `wayle/styles/` (`@define-color`), hardcoded hex reused in
+  `wlogout/style.css` and Hyprland `general.conf`.
 
 ## Build & Deploy
 
@@ -151,17 +148,15 @@ User input
 ./scripts/pkgs.sh
 
 # Manually restart the bar
-~/.config/waybar/start.sh
+wayle panel restart
 ```
 
 No CI, no tests, no linter configs exist in this repo.
 
 ## Known Inconsistencies (observed, not judged)
 
-- `dunstrc` comments are in Russian; config keys otherwise English.
 - `swww.conf` has a hardcoded wallpaper path `wallpaper = /home/hypr/...` (wrong user).
-- Waybar config references `~/.config/ml4w/scripts/...` paths which do not exist here.
+- `hyprland.conf` + `conf/*.conf` are legacy rollback; active config is `hyprland.lua`.
 - `scripts/install-packages.sh` is an empty shell (shebang only); real logic is in
   `scripts/pkgs.sh`.
-- `autostart.conf` starts both `swaync` and Dunst is configured (`dunstrc` exists) —
-  one daemon may shadow the other.
+- `wayle/` config lives in `~/.config/wayle` but is not tracked in this dotfiles repo.

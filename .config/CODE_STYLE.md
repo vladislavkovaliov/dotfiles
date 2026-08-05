@@ -8,23 +8,23 @@ linters, formatters, or CI** configured — follow the observed conventions belo
 
 | Item | Convention | Example |
 |------|-----------|---------|
-| Config dirs | lowercase, one word | `hypr`, `waybar`, `rofi` |
+| Config dirs | lowercase, one word | `hypr`, `rofi`, `wlogout` |
 | Hyprland conf files | lowercase, one concern per file | `keybindings.conf`, `windowrules.conf` |
 | Shell scripts | `kebab-case.sh` | `volume-control.sh`, `wallpaper-selector.sh` |
 | Shell functions | `_snake_case` (leading underscore) | `_check-package-installed`, `_install-yay` |
 | Shell arrays/vars | `snake_case` | `general`, `msgTag`, `ID_FILE` |
-| Waybar CSS ids | `#kebab-case` matching module name | `#custom-exit`, `#pulseaudio` |
-| Waybar colors | `@define-color` short names | `bg0`, `fg`, `blue`, `red` |
+| Wayle/Wlogout CSS ids | `#kebab-case` matching module name | `#custom-exit`, `#pulseaudio` |
+| Wayle/Wlogout colors | `@define-color` short names | `bg0`, `fg`, `blue`, `red` |
 | Wallpaper assets | `Pascal-Case` | `Space-Nebula.png`, `desert-red-sun.jpg` |
 
 ## File Organization
 
 - **One concern per file.** Hyprland splits config into `conf/*.conf` sourced from a
   single `hyprland.conf` entry point. Keep this pattern when adding settings.
-- **Scripts live next to their config.** `hypr/scripts/`, `waybar/scripts/`,
+- **Scripts live next to their config.** `hypr/scripts/`,
   `wlogout/icons/`.
 - **Assets colocated** with the tool that uses them (`hypr/wallpaper/`).
-- **Palette centralized** in `waybar/colors/default.css`; reference it rather than
+- **Palette centralized** in `wayle/styles/`; reference it rather than
   duplicating hex values.
 
 ## Import / Source Style
@@ -51,15 +51,14 @@ new_id=$(notify-send -r "$notif_id" -u low -i "$icon" "Volume" "$text" -p | head
 echo "$new_id" > "$ID_FILE"
 ```
 
-- Waybar custom modules emit JSON: `echo "{\"text\":\"...\",\"class\":\"...\"}"`
-  (`waybar/scripts/ip/ip.sh`).
+- Wayle custom modules emit JSON: `echo "{\"text\":\"...\",\"class\":\"...\"}"`.
 
 ### Hyprland config
 - Define reusable vars with `$name = value` (`$mainMod = SUPER`, `$terminal = kitty`).
 - Group related binds; comment each section (`# Workspaces`, `# Media keys`).
 - Use `bindel` for repeatable (volume/brightness) and `bindl` for locked media binds.
 
-### CSS (Waybar / Wlogout)
+### CSS (Wayle / Wlogout)
 - Section headers: `/* ---- Section Name ---- */`.
 - One selector per rule block, consistent `margin`/`padding`/`border-radius` rhythm.
 - Colors referenced via `@define-color` variables, not raw hex.
@@ -78,14 +77,14 @@ echo "$new_id" > "$ID_FILE"
 
 ## Testing
 
-- **No tests exist.** Validation is manual: run `./stow.sh`, restart Waybar
-  (`start.sh`), or trigger scripts via keybinds.
+- **No tests exist.** Validation is manual: run `./stow.sh`, restart Wayle
+  (`wayle panel start`), or trigger scripts via keybinds.
 
 ## Do's
 
 - Keep one concern per Hyprland conf file; source it from `hyprland.conf`.
 - Use `kebab-case` for script filenames, `_snake_case` for shell functions.
-- Centralize the color palette in `waybar/colors/default.css`.
+- Centralize the color palette in `wayle/styles/`.
 - Use the notification ID-replacement pattern for volume/brightness feedback.
 - Use `#!/usr/bin/env bash` shebangs and `set -e` in install scripts.
 
@@ -96,10 +95,12 @@ echo "$new_id" > "$ID_FILE"
 - Don't reference `~/.config/ml4w/...` paths (leftover from another setup; not present
   in this repo).
 - Don't duplicate hex colors when a `@define-color` exists.
-- Don't add a second notification daemon config without reconciling swaync vs Dunst.
+- Don't add a second notification daemon config without reconciling with Wayle notify.
 
 ## Docs
 
 [hyperland](https://github.com/hyprwm/Hyprland)
 [hyperland-wiki](https://wiki.hypr.land/)
-[waybar](https://github.com/Alexays/Waybar/wiki)
+[hyprlock](https://github.com/hyprwm/hyprlock/tree/main)
+[wayle](https://github.com/wayle-rs/wayle)
+[wleave](https://github.com/wleave-rs/wleave)

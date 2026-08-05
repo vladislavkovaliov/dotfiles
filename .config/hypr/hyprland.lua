@@ -42,8 +42,7 @@ local menu        = "rofi -show drun"
 -- NOTE: hl.exec_once does not exist in the 0.56 Lua API. exec-once semantics
 -- (run once at session start, not on reload) map to the hyprland.start event.
 hl.on("hyprland.start", function()
-    hl.exec_cmd("waybar")
-    hl.exec_cmd("swaync")
+    hl.exec_cmd("wayle panel start")
     hl.exec_cmd("awww-daemon")
     hl.exec_cmd("awww img ~/.config/hypr/wallpaper/Space-Nebula.png --transition-type grow --transition-duration 1.5 --transition-fps 60")
 end)
@@ -296,3 +295,5 @@ hl.window_rule({
     move  = "20 monitor_h-120",
     float = true,
 })
+
+
