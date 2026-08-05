@@ -23,28 +23,3 @@ case "$1" in
         pactl set-sink-mute @DEFAULT_SINK@ toggle
         ;;
 esac
-
-volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -o '[0-9]\+%' | head -n1 | tr -d '%')
-mute=$(pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}')
-
-
-if [ -f "$ID_FILE" ]; then
-    notif_id=$(cat "$ID_FILE")
-else
-    notif_id=0
-fi
-
-if [[ "$mute" == "yes" || "$volume" -eq 0 ]]; then
-    icon="audio-volume-muted"
-    text="Muted"
-else
-    if (( volume < 30 )); then icon="audio-volume-low"
-    elif (( volume < 70 )); then icon="audio-volume-medium"
-    else icon="audio-volume-high"
-    fi
-    text="$volume%"
-fi
-
-new_id=$(notify-send -r "$notif_id" -u low -i "$icon" "Volume" "$text" -p | head -n1)
-
-echo "$new_id" > "$ID_FILE"
