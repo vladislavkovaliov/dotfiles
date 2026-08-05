@@ -79,7 +79,7 @@ The script:
 
 ## Package list
 
-- **Official (pacman):** awww, brightnessctl, btop, dolphin, fastfetch, firefox, flatpak, git, gum, hyprland, hyprlock, jq, kitty, libnotify, libpulse, neovim, networkmanager, pipewire, pipewire-pulse, playerctl, qt5-wayland, qt6-wayland, rofi-wayland, stow, ttf-fira-code, ttf-fira-sans, ttf-font-awesome, unzip, upower, wget, wireplumber, xdg-desktop-portal-hyprland
+- **Official (pacman):** awww, brightnessctl, btop, dolphin, fastfetch, firefox, flatpak, git, gum, hyprland, hyprlock, jq, kitty, libnotify, libpulse, neovim, networkmanager, opencode, pipewire, pipewire-pulse, playerctl, qt5-wayland, qt6-wayland, ripgrep, rofi-wayland, stow, ttf-fira-code, ttf-fira-sans, ttf-font-awesome, unzip, upower, wget, wireplumber, xdg-desktop-portal-hyprland
 - **AUR (yay):** blueman, ttf-firacode-nerd, wayle-bin, wleave, hyprshutdown
 - **Optional** (commented out in `scripts/pkgs.sh`): power-profiles-daemon, grim, slurp, swappy, wl-clipboard
 

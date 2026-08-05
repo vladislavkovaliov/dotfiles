@@ -16,9 +16,11 @@ package installation.
 | Launcher | rofi-wayland (rasi theme) |
 | Notifications | wayle notify (built-in) |
 | Wallpaper | awww (former swww) |
-| Power menu | wlogout + wleave |
+| Power menu | wleave (wlogout-compatible) |
 | Lock screen | hyprlock |
-| Terminal / FM | kitty / dolphin, thunar |
+| Terminal / FM | kitty / dolphin |
+| Editor | nvim (AstroNvim + lazy.nvim) |
+| AI coding agent | opencode |
 | Audio | PipeWire via `pactl`, `wpctl` |
 | Backlight | `brightnessctl` |
 | Media keys | `playerctl` |
@@ -34,17 +36,22 @@ package installation.
 │   │   ├── hyprland.lua      # entry point (Hyprland 0.56 Lua API)
 │   │   ├── hyprland.conf     # legacy .conf entry point (rollback fallback)
 │   │   ├── conf/             # one file per concern (see below)
-│   │   ├── scripts/          # volume/brightness/wallpaper shell scripts
+│   │   ├── scripts/          # volume/brightness/wallpaper/lock shell scripts
 │   │   ├── wallpaper/        # image assets (png/jpg)
 │   │   ├── hyprlock.conf     # lock screen config
 │   │   └── swww.conf         # legacy wallpaper daemon defaults (awww)
+│   ├── nvim/                 # AstroNvim config (lazy.nvim, mason LSP)
+│   ├── opencode/             # opencode AI agent config (profiles/, plugins)
 │   ├── rofi/                 # config.rasi theme
-│   └── wlogout/              # power menu: layout + style.css + icons/
+│   ├── wayle/                # bar/notify shell: runtime.toml + styles + themes
+│   ├── wleave/               # power menu: layout.json + style.css
+│   └── wlogout/              # legacy power menu (wleave-compatible fallback)
 ├── scripts/
-│   ├── pkgs.sh               # installs the full package list via yay
-│   └── install-packages.sh   # placeholder (shebang only)
+│   ├── pkgs.sh               # installs official (pacman) + AUR (yay) packages
+│   └── install-packages.sh   # thin wrapper → pkgs.sh
+├── setup.sh                  # one-shot: pkgs.sh + stow.sh
 ├── stow.sh                   # stow -d ~/dotfiles -t ~/ . --adopt
-└── README.md                 # empty
+└── README.md
 ```
 
 ### Hyprland modular config
@@ -94,9 +101,25 @@ files each cover a single concern:
   `-dmenu`, applies selection via `awww img --transition-type grow`.
 
 ### Package bootstrap (`~/dotfiles/scripts/pkgs.sh`)
-- `general` array = full package list (WM stack + utils, see Tech Stack).
-- Helpers: `_check-command-exists`, `_check-package-installed`, `_install-yay`,
-  `_install-packages` (runs `yay -S --noconfirm` per missing package).
+- `official` array (pacman) + `aur` array (yay) + commented-out `optional` array.
+- `set -euo pipefail`; idempotent via `--needed`.
+- `_install-yay` bootstraps the AUR helper from source if missing, then a single
+  `yay -S --needed --noconfirm "${aur[@]}"` call installs all AUR packages.
+
+### wleave (`~/.config/wleave`)
+- Power menu (wlogout-compatible, GTK4). Launched from the wayle bar's power
+  module: `wleave -b 1`.
+- `layout.json` — buttons (lock/hibernate/logout/shutdown/suspend/reboot) with
+  keybinds and per-action fallbacks; suspend chains `lockscreen.sh && systemctl
+  suspend`. `style.css` — GTK CSS (libadwaita vars, one-dark palette).
+
+### nvim (`~/.config/nvim`)
+- AstroNvim distribution (lazy.nvim bootstrap in `init.lua`, plugins in `lua/plugins/`).
+- LSP servers via mason (`lua/plugins/mason.lua`), `lazy-lock.json` pins versions.
+
+### opencode (`~/.config/opencode`)
+- AI coding agent (terminal). `opencode.jsonc` selects model + DCP plugin; per-profile
+  config in `profiles/{default,micode}/`.
 
 ## Data Flow
 
@@ -113,7 +136,7 @@ User input
        XF86Audio*     → volume-control.sh (pactl → notify)
        XF86Brightness → brightness-control.sh (brightnessctl → notify)
        $mainMod ALT W → wallpaper-selector.sh (rofi → awww img)
-       power module   → wleave -b 1 (wlogout actions: lock/suspend/logout/...)
+       power module   → wleave -b 1 (lock/suspend/logout/shutdown/reboot)
 ```
 
 ## External Integrations
@@ -157,6 +180,4 @@ No CI, no tests, no linter configs exist in this repo.
 
 - `swww.conf` has a hardcoded wallpaper path `wallpaper = /home/hypr/...` (wrong user).
 - `hyprland.conf` + `conf/*.conf` are legacy rollback; active config is `hyprland.lua`.
-- `scripts/install-packages.sh` is an empty shell (shebang only); real logic is in
-  `scripts/pkgs.sh`.
-- `wayle/` config lives in `~/.config/wayle` but is not tracked in this dotfiles repo.
+- `wlogout/` is legacy — the active power menu is `wleave/` (kept as compatible fallback).

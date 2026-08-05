@@ -25,11 +25,13 @@ official=(
 	libpulse                  # pactl (volume scripts)
 	neovim                    # editor
 	networkmanager            # network management (wayle module)
+	opencode                  # AI coding agent (terminal)
 	pipewire                  # audio server
 	pipewire-pulse            # pulseaudio compat (wpctl)
 	playerctl                 # media control (keybindings)
 	qt5-wayland               # qt5 wayland support
 	qt6-wayland               # qt6 wayland support
+	ripgrep                   # fast grep (opencode dep, nvim/treesitter)
 	rofi-wayland              # app launcher / menu
 	stow                      # symlink dotfiles into ~ (setup.sh)
 	ttf-fira-code             # monospace font
